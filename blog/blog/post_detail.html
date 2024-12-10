@@ -1,0 +1,10 @@
+<h1>{{ posts.title }}</h1>
+<p>{{ posts.content }}</p>
+<p>Created on: {{ posts.create_date }}</p>
+<p>Author: {{ posts.author }}</p>
+
+{% if posts.image %}
+    <img src="{{ posts.image.url }}" alt="{{ posts.title }} image">
+{% else %}
+    <p>No image available</p>
+{% endif %}

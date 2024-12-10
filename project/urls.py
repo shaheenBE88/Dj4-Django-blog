@@ -15,20 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path  # Ensure this is imported
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from blog.views import post_list, post_detail, post_new, edit_post, delete_post
+from blog.views import PostList, PostDetail, PostCreate, PostUpdate, PostDelete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', post_list, name='post_list'),
-    path('blog/new/', post_new, name='post_new'),
-    path('blog/<int:post_id>/', post_detail, name='post_detail'),
-    path('blog/<int:post_id>/edit/', edit_post, name='edit_post'),
-    path('blog/<int:post_id>/delete/', delete_post, name='delete_post'),
+    path('blog/', PostList.as_view(), name='post_list'),  # Use CBV with as_view()
+    path('blog/new/', PostCreate.as_view(), name='post_create'),  # Use CBV for new post
+    path('blog/<int:pk>/', PostDetail.as_view(), name='post_detail'),  # CBV for detail
+    path('blog/<int:pk>/edit/', PostUpdate.as_view(), name='edit_post'),  # CBV for edit
+    path('blog/<int:pk>/delete/', PostDelete.as_view(), name='delete_post'),  # CBV for delete
 ]
 
 # Static and media files in development
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:  # Ensure these are only for development
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
